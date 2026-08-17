@@ -16,7 +16,10 @@ function FileUpload({ onParsed, onError }) {
   async function handleFile(file) {
     if (!file) return;
     if (!file.name.toLowerCase().endsWith(".csv")) {
-      onError?.("That doesn't look like a CSV file. Please choose a .csv export.");
+      onError?.(
+        `"${file.name}" isn't a CSV file. Please choose a .csv export.`,
+        file
+      );
       return;
     }
     setFileName(file.name);
@@ -25,7 +28,7 @@ function FileUpload({ onParsed, onError }) {
       const result = await parseCsvFile(file);
       onParsed?.(result, file);
     } catch (err) {
-      onError?.(err.message ?? "Could not parse this file.");
+      onError?.(err.message ?? "Could not parse this file.", file);
     } finally {
       setIsParsing(false);
     }
