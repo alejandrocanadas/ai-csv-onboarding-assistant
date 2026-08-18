@@ -26,6 +26,7 @@ function App() {
   const [assessment, setAssessment] = useState(null);
   const [assessmentLoading, setAssessmentLoading] = useState(false);
   const [assessmentError, setAssessmentError] = useState(null);
+  const [activeTab, setActiveTab] = useState("assessment");
 
   function handleApiKeyChange(key) {
     setApiKey(key);
@@ -40,6 +41,7 @@ function App() {
     // A new file makes any previous narrative stale.
     setAssessment(null);
     setAssessmentError(null);
+    setActiveTab("assessment");
   }
 
   function handleError(message, file) {
@@ -81,9 +83,12 @@ function App() {
 
   return (
     <div className="min-h-screen bg-bg text-ink">
-      <header className="border-b border-border/15 bg-surface">
+      <header className="border-b-2 border-border bg-surface">
         <div className="mx-auto max-w-5xl px-6 py-6">
-          <h1 className="text-2xl font-bold tracking-tight">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent">
+            Data onboarding assistant
+          </p>
+          <h1 className="mt-1 text-3xl font-extrabold tracking-tight text-ink">
             CSV Onboarding Assistant
           </h1>
           <p className="mt-1 text-sm text-ink-muted">
@@ -110,29 +115,64 @@ function App() {
               columnCount={profile.columnCount}
             />
 
-            <AssessmentPanel
-              canGenerate={Boolean(apiKey)}
-              loading={assessmentLoading}
-              error={assessmentError}
-              assessment={assessment}
-              onGenerate={handleGenerateAssessment}
-            />
+            <TabNav activeTab={activeTab} onChange={setActiveTab} />
 
-            <section className="rounded-xl border border-border/15 bg-surface p-6">
-              <h2 className="text-lg font-semibold">What we found</h2>
-              <p className="mt-1 text-sm text-ink-muted">
-                Every item below comes from checking the actual data — nothing here is guessed.
-              </p>
-              <div className="mt-4">
-                <FindingsList findings={findings} />
+            {activeTab === "assessment" && (
+              <AssessmentPanel
+                canGenerate={Boolean(apiKey)}
+                loading={assessmentLoading}
+                error={assessmentError}
+                assessment={assessment}
+                onGenerate={handleGenerateAssessment}
+              />
+            )}
+
+            {activeTab === "data" && (
+              <div className="space-y-6">
+                <section className="rounded-xl border border-border bg-surface p-6">
+                  <h2 className="text-lg font-semibold">What we found</h2>
+                  <p className="mt-1 text-sm text-ink-muted">
+                    Every item below comes from checking the actual data — nothing here is guessed.
+                  </p>
+                  <div className="mt-4">
+                    <FindingsList findings={findings} />
+                  </div>
+                </section>
+
+                <ColumnDetail profile={profile} />
+                {parsed && <RawPreview result={parsed} />}
               </div>
-            </section>
-
-            <ColumnDetail profile={profile} />
-            {parsed && <RawPreview result={parsed} />}
+            )}
           </div>
         )}
       </main>
+    </div>
+  );
+}
+
+const TABS = [
+  { id: "assessment", label: "Assessment" },
+  { id: "data", label: "Data analysis" },
+];
+
+/** Segmented control switching between the narrative assessment and the raw findings/data views. */
+function TabNav({ activeTab, onChange }) {
+  return (
+    <div className="flex overflow-hidden rounded-lg border-2 border-border">
+      {TABS.map((tab) => (
+        <button
+          key={tab.id}
+          type="button"
+          onClick={() => onChange(tab.id)}
+          className={`flex-1 px-4 py-2.5 text-sm font-bold uppercase tracking-wide transition-colors ${
+            activeTab === tab.id
+              ? "bg-ink text-bg"
+              : "bg-surface text-ink-muted hover:text-ink"
+          }`}
+        >
+          {tab.label}
+        </button>
+      ))}
     </div>
   );
 }
@@ -170,7 +210,7 @@ function RawPreview({ result }) {
   const previewRows = result.rows.slice(0, 5);
 
   return (
-    <section className="rounded-xl border border-border/15 bg-surface p-6">
+    <section className="rounded-xl border border-border bg-surface p-6">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
@@ -182,14 +222,14 @@ function RawPreview({ result }) {
 
       {open && (
         <>
-          <div className="mt-4 overflow-x-auto rounded-lg border border-border/15">
+          <div className="mt-4 overflow-x-auto rounded-lg border border-border">
             <table className="w-full min-w-max border-collapse text-left text-sm">
               <thead>
                 <tr className="bg-bg">
                   {result.columns.map((col) => (
                     <th
                       key={col}
-                      className="border-b border-border/15 px-3 py-2 font-medium text-ink-muted"
+                      className="border-b border-border px-3 py-2 font-medium text-ink-muted"
                     >
                       {col}
                     </th>
@@ -200,7 +240,7 @@ function RawPreview({ result }) {
                 {previewRows.map((row, i) => (
                   <tr key={i} className="odd:bg-surface even:bg-bg/40">
                     {result.columns.map((col) => (
-                      <td key={col} className="border-b border-border/10 px-3 py-2">
+                      <td key={col} className="border-b border-border/30 px-3 py-2">
                         {row[col] || <span className="text-ink-muted">—</span>}
                       </td>
                     ))}

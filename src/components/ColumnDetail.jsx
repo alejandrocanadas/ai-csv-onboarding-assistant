@@ -10,7 +10,7 @@ function ColumnDetail({ profile }) {
   const { completeness, consistency, outliers } = profile;
 
   return (
-    <section className="rounded-xl border border-border/15 bg-surface p-6">
+    <section className="rounded-xl border border-border bg-surface p-6">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
@@ -23,7 +23,7 @@ function ColumnDetail({ profile }) {
       </button>
 
       {open && (
-        <div className="mt-4 overflow-x-auto rounded-lg border border-border/15">
+        <div className="mt-4 overflow-x-auto rounded-lg border border-border">
           <table className="w-full min-w-max border-collapse text-left text-sm">
             <thead>
               <tr className="bg-bg">
@@ -38,7 +38,7 @@ function ColumnDetail({ profile }) {
                 ].map((h) => (
                   <th
                     key={h}
-                    className="border-b border-border/15 px-3 py-2 font-medium text-ink-muted"
+                    className="border-b border-border px-3 py-2 font-medium text-ink-muted"
                   >
                     {h}
                   </th>
@@ -54,28 +54,28 @@ function ColumnDetail({ profile }) {
 
                 return (
                   <tr key={column} className="odd:bg-surface even:bg-bg/40">
-                    <td className="border-b border-border/10 px-3 py-2 font-medium">
+                    <td className="border-b border-border/30 px-3 py-2 font-medium">
                       {column}
                     </td>
-                    <td className="border-b border-border/10 px-3 py-2">
+                    <td className="border-b border-border/30 px-3 py-2">
                       {(missing.missingPct * 100).toFixed(1)}%
                     </td>
-                    <td className="border-b border-border/10 px-3 py-2">
+                    <td className="border-b border-border/30 px-3 py-2">
                       {typeInfo?.dominantType ?? "—"}
                       {typeInfo?.mixedNumericFormatting && (
                         <span className="ml-1 text-warn">(mixed %/number)</span>
                       )}
                     </td>
-                    <td className="border-b border-border/10 px-3 py-2">
+                    <td className="border-b border-border/30 px-3 py-2">
                       {typeInfo ? `${(typeInfo.mismatchPct * 100).toFixed(1)}%` : "—"}
                     </td>
-                    <td className="border-b border-border/10 px-3 py-2">
+                    <td className="border-b border-border/30 px-3 py-2">
                       {variants.length > 0 ? `${variants.length} cluster(s)` : "—"}
                     </td>
-                    <td className="border-b border-border/10 px-3 py-2">
+                    <td className="border-b border-border/30 px-3 py-2">
                       {outlierInfo ? outlierInfo.outliers.length : "—"}
                     </td>
-                    <td className="border-b border-border/10 px-3 py-2">
+                    <td className="border-b border-border/30 px-3 py-2">
                       {outlierInfo?.unexpectedNegatives.length > 0
                         ? outlierInfo.unexpectedNegatives.length
                         : "—"}

@@ -26,7 +26,7 @@ function ApiKeySettings({ apiKey, onApiKeyChange }) {
 
   if (!isEditing && apiKey) {
     return (
-      <div className="flex items-center gap-3 rounded-lg border border-border/15 bg-surface px-4 py-3 text-sm">
+      <div className="flex items-center gap-3 rounded-lg border border-border bg-surface px-4 py-3 text-sm">
         <span className="text-ink-muted">Anthropic API key</span>
         <span className="font-mono text-ink">{maskKey(apiKey)}</span>
         <button
@@ -46,7 +46,7 @@ function ApiKeySettings({ apiKey, onApiKeyChange }) {
   return (
     <form
       onSubmit={handleSave}
-      className="flex flex-wrap items-center gap-2 rounded-lg border border-border/15 bg-surface px-4 py-3"
+      className="flex flex-wrap items-center gap-2 rounded-lg border border-border bg-surface px-4 py-3"
     >
       <label htmlFor="api-key" className="text-sm text-ink-muted">
         Anthropic API key

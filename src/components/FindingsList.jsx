@@ -13,7 +13,7 @@ const SEVERITY_STYLES = {
   },
   info: {
     label: "Minor",
-    border: "border-border/20",
+    border: "border-border/40",
     bg: "bg-bg",
     text: "text-ink-muted",
   },

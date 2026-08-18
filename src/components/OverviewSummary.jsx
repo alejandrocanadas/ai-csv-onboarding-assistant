@@ -28,7 +28,7 @@ function OverviewSummary({ profile, findings, rowCount, columnCount }) {
 
 function Card({ label, value, tone = "neutral" }) {
   const toneClasses = {
-    neutral: "border-border/15 bg-surface",
+    neutral: "border-border bg-surface",
     bad: "border-bad/30 bg-bad-soft",
     warn: "border-warn/30 bg-warn-soft",
     good: "border-good/30 bg-good-soft",
